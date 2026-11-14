@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="ru"><head>
+<meta charset="UTF-8"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+<title>Прогнозы Лиги наций — 3D</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #050a08; font-family: 'Segoe UI', Arial, sans-serif; }
+  #scene { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; touch-action: none; }
+
+  .hud { position: fixed; z-index: 10; color: #e8f0ea; }
+
+  /* ---------- Шапка ---------- */
+  #header { top: 0; left: 0; right: 0; padding: 10px 16px 22px;
+    background: linear-gradient(180deg, rgba(3,10,7,.92), rgba(3,10,7,0)); pointer-events: none; }
+  #header > * { pointer-events: auto; }
+  #header h1 { font-size: 16px; font-weight: 700; letter-spacing: .4px; }
+  #header h1 small { display: block; font-size: 11px; font-weight: 400; color: #8fb8a3; margin-top: 2px; }
+
+  /* ---------- Блок точности ---------- */
+  #accuracy { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px;
+    background: rgba(10,24,17,.85); border: 1px solid #24463a; border-radius: 20px; padding: 5px 14px; font-size: 12px; }
+  #accuracy b { color: #7ddc9f; font-size: 14px; }
+  #accuracy .dot { width: 8px; height: 8px; border-radius: 50%; background: #2f7d4f; }
+
+  /* ---------- Фильтры ---------- */
+  .filterrow { display: flex; gap: 6px; margin-top: 8px; overflow-x: auto; scrollbar-width: none; }
+  .filterrow::-webkit-scrollbar { display: none; }
+  .fbtn { flex: 0 0 auto; border: 1px solid #2c4a3b; background: rgba(10,24,17,.8); color: #cfe6d8;
+    padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; transition: all .15s; white-space: nowrap; }
+  .fbtn:hover { background: #1a3a2a; }
+  .fbtn.active { background: #2f7d4f; border-color: #2f7d4f; color: #fff; }
+  .flabel { flex: 0 0 auto; font-size: 11px; color: #6f937f; align-self: center; margin-right: 2px; }
+
+  /* ---------- Панель деталей ---------- */
+  #overlay { position: fixed; inset: 0; z-index: 20; background: rgba(2,6,4,.55); display: none; }
+  #overlay.open { display: block; }
+  #panel { right: 18px; top: 90px; width: 380px; max-width: calc(100vw - 36px); max-height: calc(100% - 120px);
+    overflow-y: auto; background: rgba(8,18,13,.96); border: 1px solid #24463a; border-radius: 14px; padding: 18px;
+    backdrop-filter: blur(8px); display: none; z-index: 21; }
+  #panel.open { display: block; }
+  #panel .close { float: right; cursor: pointer; color: #7ea892; font-size: 18px; line-height: 1; padding: 4px; }
+  #panel h2 { font-size: 17px; margin-bottom: 2px; }
+  #panel .meta { font-size: 12px; color: #8fb8a3; margin-bottom: 8px; }
+  #panel .madeat { font-size: 11px; color: #ffd97a; margin-bottom: 10px; }
+  #panel .score { font-size: 46px; font-weight: 800; text-align: center; margin: 8px 0 2px; color: #fff; }
+  #panel .forecast { text-align: center; font-size: 14px; color: #ffd97a; margin-bottom: 4px; }
+  #panel .bar { height: 8px; background: #16281f; border-radius: 4px; overflow: hidden; margin: 6px 0 12px; }
+  #panel .bar i { display: block; height: 100%; background: linear-gradient(90deg, #2f7d4f, #7ddc9f); }
+
+  /* Было -> Стало */
+  .wasbox { background: #0d1b13; border: 1px solid #1d3a2a; border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: 13px; }
+  .wasbox .wtitle { font-size: 11px; color: #8fb8a3; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .wasrow { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; }
+  .wasrow .wlab { color: #6f937f; flex: 0 0 auto; }
+  .wasrow .wval { text-align: right; }
+  .wasrow .old { color: #9db8a8; text-decoration: line-through; text-decoration-color: #7a4a4a; }
+  .wasrow .new { color: #ffffff; font-weight: 600; }
+
+  #panel .reason { font-size: 13px; line-height: 1.55; color: #cfe0d5; margin-bottom: 14px; }
+  #panel .sect { font-size: 11px; color: #8fb8a3; text-transform: uppercase; letter-spacing: .5px; margin: 10px 0 6px; }
+
+  /* Кнопка закрытия сверху панели */
+  .pclosebar { display: flex; justify-content: center; margin: -6px 0 10px; }
+  .pclosebar span { background: #1a3a2a; border: 1px solid #2c4a3b; color: #cfe6d8; font-size: 13px;
+    padding: 7px 26px; border-radius: 18px; cursor: pointer; }
+  .pclosebar span:active { background: #2f7d4f; }
+
+  /* Составы */
+  .lineups { display: flex; gap: 10px; }
+  .lu { flex: 1; min-width: 0; }
+  .lu h3 { font-size: 13px; text-align: center; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lu .scheme { text-align: center; font-size: 11px; color: #8fb8a3; margin-bottom: 6px; }
+  .pitch-mini { position: relative; background: linear-gradient(180deg, #0f4226, #0d3a22); border: 1px solid #2c4a3b;
+    border-radius: 8px; height: 240px; overflow: hidden; }
+  .pitch-mini::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255,255,255,.25); }
+  .pitch-mini::after { content: ''; position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px;
+    border: 1px solid rgba(255,255,255,.25); border-radius: 50%; }
+  .pl { position: absolute; transform: translate(-50%, -50%); text-align: center; }
+  .pl i { display: block; width: 20px; height: 20px; margin: 0 auto 1px; border-radius: 50%;
+    background: #2f7d4f; border: 1px solid #7ddc9f; }
+  .pl.away i { background: #3a5a8c; border-color: #7ab8ff; }
+  .pl span { font-size: 8.5px; color: #e8f0ea; line-height: 1.1; display: block; max-width: 62px; }
+  .lu .nodata { text-align: center; font-size: 12px; color: #9db8a8; padding: 40px 6px; }
+  .lu .src { font-size: 10px; color: #6f937f; margin-top: 4px; line-height: 1.3; }
+
+  /* ---------- Подсказка и легенда ---------- */
+  #hint { bottom: 56px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #9fc4ae;
+    background: rgba(5,14,9,.8); padding: 6px 16px; border-radius: 16px; white-space: nowrap;
+    border: 1px solid #1d3a2a; }
+  #legend { bottom: 12px; left: 16px; font-size: 11px; color: #7ea892; display: flex; gap: 12px; }
+  #legend span::before { content: '■ '; }
+
+  /* ---------- Мобильная адаптация ---------- */
+  @media (max-width: 700px) {
+    #header { padding: 8px 12px 20px; }
+    #header h1 { font-size: 14px; }
+    #header h1 small { font-size: 10px; }
+    #legend { display: none; }
+    #hint { bottom: 46px; font-size: 11px; padding: 5px 12px; }
+    #panel { top: auto; bottom: 0; left: 0; right: 0; width: 100%; max-width: 100%;
+      max-height: 78%; border-radius: 16px 16px 0 0; border-left: none; border-right: none; border-bottom: none; padding-bottom: 30px; }
+    .lineups { flex-direction: column; }
+    .pitch-mini { height: 210px; }
+  }
+</style></head>
+<body>
+<canvas id="scene"></canvas>
+
+<div id="header" class="hud">
+  <h1>ЛИГА НАЦИЙ 2026/27 · ПРОГНОЗЫ НА НЕДЕЛЮ<small>12–15 ноября · 5-й и 6-й туры · нажмите на карточку — составы и причина прогноза</small></h1>
+  <div id="accuracy"><span class="dot"></span><span>Точность прогнозов: <b id="accval">—</b> <span id="accdetail"></span></span></div>
+  <div class="filterrow" id="leagueFilters">
+    <span class="flabel">Лига:</span>
+    <button class="fbtn active" data-f="ALL" data-type="league">Все</button>
+    <button class="fbtn" data-f="A" data-type="league">Лига A</button>
+    <button class="fbtn" data-f="B" data-type="league">Лига B</button>
+    <button class="fbtn" data-f="C" data-type="league">Лига C</button>
+    <button class="fbtn" data-f="D" data-type="league">Лига D</button>
+  </div>
+  <div class="filterrow" id="dayFilters">
+    <span class="flabel">День:</span>
+    <button class="fbtn active" data-f="ALL" data-type="day">Все дни</button>
+    <button class="fbtn" data-f="12.11.2026" data-type="day">Чт 12.11</button>
+    <button class="fbtn" data-f="13.11.2026" data-type="day">Пт 13.11</button>
+    <button class="fbtn" data-f="14.11.2026" data-type="day">Сб 14.11</button>
+    <button class="fbtn" data-f="15.11.2026" data-type="day">Вс 15.11</button>
+  </div>
+</div>
+
+<div id="overlay"></div>
+<div id="panel" class="hud"></div>
+
+<div id="legend" class="hud">
+  <span style="color:#ffd97a">Лига A</span><span style="color:#7ab8ff">Лига B</span>
+  <span style="color:#7ddc9f">Лига C</span><span style="color:#b8b8b8">Лига D</span>
+</div>
+<div id="hint" class="hud">Свайп — вращение · щипок — зум · 2×тап — ближе</div>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+<script type="module" src="./app.v5.js"></script>
+
+
+</body></html>
