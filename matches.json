@@ -539,8 +539,9 @@
    "home": null,
    "away": null
   },
-  "result": null,
-  "correct": null
+  "result": "0:0",
+  "correct": false,
+  "correct_total": true
  },
  {
   "match": "Норвегия — Уэльс",
@@ -586,23 +587,24 @@
    },
    "away": null
   },
-  "result": null,
-  "correct": null
+  "result": "3:1",
+  "correct": true,
+  "correct_total": true
  },
  {
   "match": "Грузия — Венгрия",
   "date": "14.11.2026",
   "time": "20:00",
-  "forecast": "Ничья",
+  "forecast": "Победа Венгрии",
   "confidence": 45,
   "reason": "Грузия — 0 голов за 4 тура, без Кварацхелии (долгосрочная) и Кочорашвили (дисквал.), под временным тренером Сванадзе. Венгрия (7 очков) при победе сохраняет борьбу за 1-е место, в гостях без поражений 6 матчей. НО: Собослай — растяжение колена, решение last-minute (тренировался со страховкой); Него выбыл. Без капитана-творца гостевая атака слабее. Вердикт «прокурора»: было 50% → 45%.",
   "score": "1:1",
   "league": "B",
-  "madeAt": "14.11.2026 12:46 МСК",
+  "madeAt": "14.11.2026 12:00 МСК",
   "was": {
-   "forecast": "Победа Венгрии",
-   "confidence": 50,
-   "score": "0:1"
+   "forecast": "Ничья",
+   "confidence": 45,
+   "score": "1:1"
   },
   "total": {
    "pick": "ТМ 2.5",
@@ -613,8 +615,9 @@
    "home": null,
    "away": null
   },
-  "result": null,
-  "correct": null
+  "result": "0:2",
+  "correct": true,
+  "correct_total": true
  },
  {
   "match": "Португалия — Дания",
@@ -656,8 +659,9 @@
    },
    "away": null
   },
-  "result": null,
-  "correct": null
+  "result": "1:4",
+  "correct": false,
+  "correct_total": true
  },
  {
   "match": "Северная Ирландия — Украина",
@@ -683,8 +687,9 @@
    "home": null,
    "away": null
   },
-  "result": null,
-  "correct": null
+  "result": "1:0",
+  "correct": true,
+  "correct_total": true
  },
  {
   "match": "Австрия — Ирландия",
@@ -706,8 +711,9 @@
    "home": null,
    "away": null
   },
-  "result": null,
-  "correct": null
+  "result": "1:0",
+  "correct": true,
+  "correct_total": false
  },
  {
   "match": "Румыния — Польша",
@@ -729,8 +735,9 @@
    "home": null,
    "away": null
   },
-  "result": null,
-  "correct": null
+  "result": "2:1",
+  "correct": false,
+  "correct_total": true
  },
  {
   "match": "Швеция — Босния",
@@ -752,8 +759,9 @@
    "home": null,
    "away": null
   },
-  "result": null,
-  "correct": null
+  "result": "3:2",
+  "correct": true,
+  "correct_total": true
  },
  {
   "match": "Кипр — Черногория",
