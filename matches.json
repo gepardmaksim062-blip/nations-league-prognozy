@@ -1207,15 +1207,16 @@
     ]
    }
   },
-  "result": null,
-  "correct": null,
+  "result": "2:3",
+  "correct": false,
   "market_odds": {
    "П1": 2.6,
    "Х": 3.6,
    "П2": 2.6,
    "ТБ2.5": 1.67,
    "ТМ2.5": 2.22
-  }
+  },
+  "correct_total": true
  },
  {
   "match": "Уэльс — Португалия",
@@ -1288,14 +1289,15 @@
     ]
    }
   },
-  "result": null,
-  "correct": null,
+  "result": "2:3",
+  "correct": true,
   "market_odds": {
    "П1": 6.8,
    "Х": 5.0,
    "П2": 1.45,
    "ТБ2.5": 1.51
-  }
+  },
+  "correct_total": true
  },
  {
   "match": "Венгрия — Сев. Ирландия",
@@ -1362,14 +1364,15 @@
     ]
    }
   },
-  "result": null,
-  "correct": null,
+  "result": "1:1",
+  "correct": true,
   "market_odds": {
    "П1": 1.95,
    "Х": 3.4,
    "П2": 4.4,
    "ТБ2.5": 2.57
-  }
+  },
+  "correct_total": true
  },
  {
   "match": "Украина — Грузия",
@@ -1434,14 +1437,15 @@
     ]
    }
   },
-  "result": null,
-  "correct": null,
+  "result": "1:0",
+  "correct": true,
   "market_odds": {
    "П1": 2.25,
    "Х": 3.35,
    "П2": 3.25,
    "ТБ2.5": 2.19
-  }
+  },
+  "correct_total": true
  },
  {
   "match": "Израиль — Австрия",
@@ -1505,13 +1509,14 @@
     ]
    }
   },
-  "result": null,
-  "correct": null,
+  "result": "0:1",
+  "correct": true,
   "market_odds": {
    "П1": 4.3,
    "Х": 3.95,
    "П2": 1.78
-  }
+  },
+  "correct_total": true
  },
  {
   "match": "Ирландия — Косово",
@@ -1575,14 +1580,15 @@
     ]
    }
   },
-  "result": null,
-  "correct": null,
+  "result": "3:0",
+  "correct": true,
   "market_odds": {
    "П1": 2.17,
    "Х": 3.2,
    "П2": 3.81,
    "ТБ2.5": 2.46
-  }
+  },
+  "correct_total": true
  },
  {
   "match": "Польша — Швеция",
@@ -1649,14 +1655,15 @@
     ]
    }
   },
-  "result": null,
-  "correct": null,
+  "result": "1:1",
+  "correct": false,
   "market_odds": {
    "П1": 2.2,
    "Х": 3.68,
    "П2": 3.08,
    "ТБ2.5": 1.65
-  }
+  },
+  "correct_total": false
  },
  {
   "match": "Босния — Румыния",
@@ -1720,14 +1727,15 @@
     ]
    }
   },
-  "result": null,
+  "result": "2:1",
   "correct": null,
   "market_odds": {
    "П1": 1.9,
    "Х": 3.6,
    "П2": 4.3,
    "ТБ2.5": 1.93
-  }
+  },
+  "correct_total": false
  },
  {
   "match": "Казахстан — Словакия",
